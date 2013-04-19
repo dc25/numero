@@ -1,43 +1,48 @@
 <!doctype html>
 
 <link rel=stylesheet type=text/css href="css/style.css">
-<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
 <script type=text/javascript
   src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
 </script>
 
-<script type=text/javascript
-  src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js">
-</script>
-
 <script type=text/javascript>
 
+// add a table row with entries formatted to line up text.
 function addToOutput(operation, nbr, ltr) {
     $("#output").append($("<tr>")
                    .append($("<td>").addClass("operation").text(operation))
                    .append($("<td>").addClass("number").text(nbr))
+                   .append($("<td>").addClass("separator")) 
                    .append($("<td>").addClass("letter").text(ltr)) );
 }
 
+function lineToOutput() {
+    $("#output").append($("<div>").text("~~~~~~~~~~~~"));
+}
+
 function showNumberSum (v) {
-    addToOutput("~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~");
+    lineToOutput();
+
     var total=0;
+
+    // find the largest power of 10 with more digits than v
     var p = 1;
     while (p <= v ) {
         p = p*10;
     }
 
+    // trim off digits one at a time
     while (p != 1 ) {
-        var p0 = p/10;
-        var d = ~~(v/p0);
-        v = v - d*p0;
-        total+=d;
+        var p0 = p/10;         // power of 10 with one digit less than v
+        var digit = ~~(v/p0);  // divide by power of 10 and round to get digit
+        v = v - digit*p0;      // subtract off the high digit
+        total+=digit;
         var operation = (p0==1) ? "+" : " ";
-        addToOutput(operation, d, "");
+        addToOutput(operation, digit, "");
         p = p/10;
     }
-    addToOutput("", "_____________", "");
+    addToOutput("", "____", "");
     addToOutput("", total, "");
 
     if (total >= 10) {
@@ -46,13 +51,16 @@ function showNumberSum (v) {
 }
 
 function showStringSum (e) {
+    $("#output").empty();
+    lineToOutput();
+
     var keycode=e.keyCode;
     cmdstr = $("#inputfield").val();
-    $("#output").empty();
     var lca = "a".charCodeAt(0);
 
-    addToOutput("~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~");
-    var total=0
+    var total=0;
+
+    // go through each char of the string.
     for (i = 0; i < cmdstr.length; i++)
     {
         var ltr = cmdstr[i];
@@ -61,14 +69,14 @@ function showStringSum (e) {
             val = 0;
         } else
         {
-            var lc = ltr.toLowerCase();
-            val = 1 + lc.charCodeAt(0) - lca;
+            var lc = ltr.toLowerCase();  
+            val = 1 + lc.charCodeAt(0) - lca; // subtract 'a' and add 1 
         }
         total += val;
         var operation = (i == cmdstr.length - 1) ? "+" : " ";
         addToOutput(operation, val, ltr );
     }
-    addToOutput("", "_____________", "" );
+    addToOutput("", "____", "" );
 
     addToOutput("", total, "" );
     if (total >= 10) {
@@ -83,22 +91,7 @@ $(function() {
 
 </script>
 
-<div id="header">
-    <h1>Numero!! (online version).  By Dave, inspired by Deepa.</h1>
-</div>
-
-
-<div id="input">
-<form name='f' onsubmit='return false;' class='cmdline' action=''>
-<table class="inputtable">
-    <tr>
-        <td id='prompttd'><div id='prompt' >Enter your name:</div></td>
-        <td id="inputtd">
-            <input id='inputfield' type='text' value="" />
-        </td>
-    </tr>
-</table>
-</form>
-</div>
-<div id="output">
-</div>
+<h1>Numero!!</h1>
+<div id='prompt' >Enter your name:</div>
+<input id='inputfield' type='text' value="" />
+<div id="output"> </div>

@@ -1,14 +1,25 @@
+#prompt 
+{
+    float:left;
+}
+
 .operation {
-    width: 40px;
+    width: 5px;
     text-align: right;
 }
 
 .number {
-    width: 30px;
+    width: 20px;
     text-align: right;
+}
+
+.separator {
+    width: 15px;
+    text-align: left;
 }
 
 .letter {
     width: 20px;
-    text-align: right;
+    text-align: left;
 }
+
