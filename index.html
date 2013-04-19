@@ -1,0 +1,104 @@
+<!doctype html>
+
+<link rel=stylesheet type=text/css href="css/style.css">
+<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+<script type=text/javascript
+  src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+</script>
+
+<script type=text/javascript
+  src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js">
+</script>
+
+<script type=text/javascript>
+
+function addToOutput(operation, nbr, ltr) {
+    $("#output").append($("<tr>")
+                   .append($("<td>").addClass("operation").text(operation))
+                   .append($("<td>").addClass("number").text(nbr))
+                   .append($("<td>").addClass("letter").text(ltr)) );
+}
+
+function showNumberSum (v) {
+    addToOutput("~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~");
+    var total=0;
+    var p = 1;
+    while (p <= v ) {
+        p = p*10;
+    }
+
+    while (p != 1 ) {
+        var p0 = p/10;
+        var d = ~~(v/p0);
+        v = v - d*p0;
+        total+=d;
+        var operation = (p0==1) ? "+" : " ";
+        addToOutput(operation, d, "");
+        p = p/10;
+    }
+    addToOutput("", "_____________", "");
+    addToOutput("", total, "");
+
+    if (total >= 10) {
+        showNumberSum(total);
+    }
+}
+
+function showStringSum (e) {
+    var keycode=e.keyCode;
+    cmdstr = $("#inputfield").val();
+    $("#output").empty();
+    var lca = "a".charCodeAt(0);
+
+    addToOutput("~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~");
+    var total=0
+    for (i = 0; i < cmdstr.length; i++)
+    {
+        var ltr = cmdstr[i];
+        var val
+        if (ltr == " ") {
+            val = 0;
+        } else
+        {
+            var lc = ltr.toLowerCase();
+            val = 1 + lc.charCodeAt(0) - lca;
+        }
+        total += val;
+        var operation = (i == cmdstr.length - 1) ? "+" : " ";
+        addToOutput(operation, val, ltr );
+    }
+    addToOutput("", "_____________", "" );
+
+    addToOutput("", total, "" );
+    if (total >= 10) {
+        showNumberSum(total);
+    }
+}
+
+$(function() {
+    $('#inputfield').val("");
+    $('#inputfield').keyup(showStringSum);
+});
+
+</script>
+
+<div id="header">
+    <h1>Numero!! (online version).  By Dave, inspired by Deepa.</h1>
+</div>
+
+
+<div id="input">
+<form name='f' onsubmit='return false;' class='cmdline' action=''>
+<table class="inputtable">
+    <tr>
+        <td id='prompttd'><div id='prompt' >Enter your name:</div></td>
+        <td id="inputtd">
+            <input id='inputfield' type='text' value="" />
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+<div id="output">
+</div>

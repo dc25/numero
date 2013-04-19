@@ -1,0 +1,14 @@
+.operation {
+    width: 40px;
+    text-align: right;
+}
+
+.number {
+    width: 30px;
+    text-align: right;
+}
+
+.letter {
+    width: 20px;
+    text-align: right;
+}
